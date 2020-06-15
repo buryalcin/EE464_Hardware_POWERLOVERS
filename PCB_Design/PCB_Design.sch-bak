@@ -1,0 +1,263 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L power:VCC #PWR?
+U 1 1 5ED2FEAF
+P 2550 2900
+F 0 "#PWR?" H 2550 2750 50  0001 C CNN
+F 1 "VCC" H 2565 3073 50  0000 C CNN
+F 2 "" H 2550 2900 50  0001 C CNN
+F 3 "" H 2550 2900 50  0001 C CNN
+	1    2550 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5ED312CF
+P 2400 4700
+F 0 "#PWR?" H 2400 4450 50  0001 C CNN
+F 1 "GND" H 2405 4527 50  0000 C CNN
+F 2 "" H 2400 4700 50  0001 C CNN
+F 3 "" H 2400 4700 50  0001 C CNN
+	1    2400 4700
+	1    0    0    -1  
+$EndComp
+$Comp
+L trafo:reel_trafo B?
+U 1 1 5ED3739B
+P 3950 3500
+F 0 "B?" H 3975 4325 50  0000 C CNN
+F 1 "reel_trafo" H 3975 4234 50  0000 C CNN
+F 2 "" H 3800 3350 50  0001 C CNN
+F 3 "" H 3800 3350 50  0001 C CNN
+	1    3950 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L pspice:MNMOS M?
+U 1 1 5ED38925
+P 3250 4250
+F 0 "M?" H 3538 4296 50  0000 L CNN
+F 1 "MNMOS" H 3538 4205 50  0000 L CNN
+F 2 "" H 3225 4250 50  0001 C CNN
+F 3 "~" H 3225 4250 50  0001 C CNN
+	1    3250 4250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3350 3500 3350 4050
+Wire Wire Line
+	3350 4450 3450 4450
+Wire Wire Line
+	3350 4450 3350 4700
+Connection ~ 3350 4450
+Wire Wire Line
+	2600 4700 2400 4700
+Wire Wire Line
+	3350 3050 2950 3050
+Wire Wire Line
+	2550 2900 2550 3000
+Wire Wire Line
+	3550 2900 2950 2900
+Wire Wire Line
+	2950 2900 2950 3050
+Connection ~ 2950 3050
+Wire Wire Line
+	2950 3050 2550 3050
+$Comp
+L pspice:DIODE D?
+U 1 1 5ED3A6F4
+P 3100 3700
+F 0 "D?" H 3100 3965 50  0000 C CNN
+F 1 "DIODE" H 3100 3874 50  0000 C CNN
+F 2 "" H 3100 3700 50  0001 C CNN
+F 3 "~" H 3100 3700 50  0001 C CNN
+	1    3100 3700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3600 3700 3300 3700
+Wire Wire Line
+	2600 4700 3350 4700
+Connection ~ 2600 4700
+Wire Wire Line
+	2600 3700 2900 3700
+Wire Wire Line
+	2600 3700 2600 4700
+$Comp
+L pspice:DIODE D?
+U 1 1 5ED3DBC2
+P 4800 2900
+F 0 "D?" H 4800 3165 50  0000 C CNN
+F 1 "DIODE" H 4800 3074 50  0000 C CNN
+F 2 "" H 4800 2900 50  0001 C CNN
+F 3 "~" H 4800 2900 50  0001 C CNN
+	1    4800 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L pspice:DIODE D?
+U 1 1 5ED3E515
+P 5300 3350
+F 0 "D?" V 5346 3222 50  0000 R CNN
+F 1 "DIODE" V 5255 3222 50  0000 R CNN
+F 2 "" H 5300 3350 50  0001 C CNN
+F 3 "~" H 5300 3350 50  0001 C CNN
+	1    5300 3350
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	5000 2900 5300 2900
+Wire Wire Line
+	5300 2900 5300 3150
+Wire Wire Line
+	4600 3700 5300 3700
+Wire Wire Line
+	5300 3700 5300 3550
+$Comp
+L pspice:INDUCTOR L?
+U 1 1 5ED3F2F5
+P 5800 2900
+F 0 "L?" H 5800 3115 50  0000 C CNN
+F 1 "INDUCTOR" H 5800 3024 50  0000 C CNN
+F 2 "" H 5800 2900 50  0001 C CNN
+F 3 "~" H 5800 2900 50  0001 C CNN
+	1    5800 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L pspice:CAP C?
+U 1 1 5ED3F9C9
+P 6500 3250
+F 0 "C?" H 6678 3296 50  0000 L CNN
+F 1 "CAP" H 6678 3205 50  0000 L CNN
+F 2 "" H 6500 3250 50  0001 C CNN
+F 3 "~" H 6500 3250 50  0001 C CNN
+	1    6500 3250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5ED40255
+P 7100 3250
+F 0 "R?" H 7170 3296 50  0000 L CNN
+F 1 "R" H 7170 3205 50  0000 L CNN
+F 2 "" V 7030 3250 50  0001 C CNN
+F 3 "~" H 7100 3250 50  0001 C CNN
+	1    7100 3250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5300 2900 5550 2900
+Connection ~ 5300 2900
+Wire Wire Line
+	6050 2900 6500 2900
+Wire Wire Line
+	6500 2900 6500 3000
+Wire Wire Line
+	6500 2900 7100 2900
+Wire Wire Line
+	7100 2900 7100 3100
+Connection ~ 6500 2900
+Wire Wire Line
+	6500 3500 6500 3700
+Wire Wire Line
+	6500 3700 5300 3700
+Connection ~ 5300 3700
+Wire Wire Line
+	7100 3400 7100 3700
+Wire Wire Line
+	7100 3700 6500 3700
+Connection ~ 6500 3700
+Wire Wire Line
+	4300 5200 4000 5200
+Wire Wire Line
+	2600 5200 2600 4700
+Connection ~ 4000 5200
+Wire Wire Line
+	4000 5200 2600 5200
+Wire Wire Line
+	5100 5700 5100 5900
+Wire Wire Line
+	3050 5900 3050 4250
+Wire Wire Line
+	3050 5900 5100 5900
+$Comp
+L Regulator_Controller:TL494 U?
+U 1 1 5ED353AA
+P 4900 5200
+F 0 "U?" V 4854 5944 50  0000 L CNN
+F 1 "TL494" V 4945 5944 50  0000 L CNN
+F 2 "" H 4900 5200 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/tl494.pdf" H 4900 5200 50  0001 C CNN
+	1    4900 5200
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4800 5700 4800 5850
+Wire Wire Line
+	4800 5850 4000 5850
+Wire Wire Line
+	4000 5200 4000 5850
+NoConn ~ 4700 5700
+NoConn ~ 5000 5700
+NoConn ~ 5100 4700
+NoConn ~ 5200 4700
+$Comp
+L Converter_DCDC:ATA00B36S-L U?
+U 1 1 5ED4B83B
+P 3700 6500
+F 0 "U?" H 3700 6967 50  0000 C CNN
+F 1 "ATA00B36S-L" H 3700 6876 50  0000 C CNN
+F 2 "Converter_DCDC:Converter_DCDC_Artesyn_ATA_SMD" H 3700 6150 50  0001 C CIN
+F 3 "https://www.artesyn.com/power/assets/ata_series_ds_01apr2015_79c25814fd.pdf" H 3700 6050 50  0001 C CNN
+	1    3700 6500
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5ED4E6E6
+P 4250 6500
+F 0 "#PWR?" H 4250 6250 50  0001 C CNN
+F 1 "GND" H 4255 6327 50  0000 C CNN
+F 2 "" H 4250 6500 50  0001 C CNN
+F 3 "" H 4250 6500 50  0001 C CNN
+	1    4250 6500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4250 6500 4200 6500
+Wire Wire Line
+	5600 5200 5600 6300
+Wire Wire Line
+	5600 6300 4200 6300
+Wire Wire Line
+	3200 6300 1700 6300
+Wire Wire Line
+	1700 6300 1700 3000
+Wire Wire Line
+	1700 3000 2550 3000
+Connection ~ 2550 3000
+Wire Wire Line
+	2550 3000 2550 3050
+Wire Wire Line
+	3200 6700 2100 6700
+Wire Wire Line
+	2100 6700 2100 4700
+Wire Wire Line
+	2100 4700 2400 4700
+Connection ~ 2400 4700
+$EndSCHEMATC
