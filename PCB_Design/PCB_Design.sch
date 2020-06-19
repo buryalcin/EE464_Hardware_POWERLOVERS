@@ -41,7 +41,7 @@ U 1 1 5ED3A6F4
 P 3300 3800
 F 0 "D1" H 3300 4065 50  0000 C CNN
 F 1 "DIODE" H 3300 3974 50  0000 C CNN
-F 2 "Package_TO_SOT_THT:TO-220-2_Vertical" H 3300 3800 50  0001 C CNN
+F 2 "Package_TO_SOT_THT:TO-220-2_Horizontal_TabDown" H 3300 3800 50  0001 C CNN
 F 3 "~" H 3300 3800 50  0001 C CNN
 	1    3300 3800
 	0    -1   -1   0   
@@ -96,9 +96,6 @@ F 3 "~" H 6550 3150 50  0001 C CNN
 	1    6550 3150
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	5350 2800 5600 2800
-Connection ~ 5350 2800
 Wire Wire Line
 	6100 2800 6550 2800
 Wire Wire Line
@@ -171,25 +168,12 @@ F 3 "~" H 3050 1300 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	5050 5850 5050 6300
-Wire Wire Line
-	5050 6300 4350 6300
 NoConn ~ 4550 4950
 NoConn ~ 4550 5250
 NoConn ~ 5550 5350
 NoConn ~ 5550 5450
 Wire Wire Line
 	2650 2650 2650 2800
-$Comp
-L pspice:MNMOS M1
-U 1 1 5ED38925
-P 2800 4200
-F 0 "M1" H 3088 4246 50  0000 L CNN
-F 1 "MNMOS" H 3088 4155 50  0000 L CNN
-F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 2775 4200 50  0001 C CNN
-F 3 "~" H 2775 4200 50  0001 C CNN
-	1    2800 4200
-	-1   0    0    -1  
-$EndComp
 $Comp
 L power:GND #PWR0106
 U 1 1 5EEBE34B
@@ -205,8 +189,6 @@ Wire Wire Line
 	3100 3400 3050 3400
 Wire Wire Line
 	2650 3400 2650 4000
-Wire Wire Line
-	2750 4000 2700 4000
 $Comp
 L power:VCC #PWR0107
 U 1 1 5EEC351D
@@ -303,19 +285,14 @@ Text Label 2900 5300 0    50   ~ 0
 GATE
 Wire Wire Line
 	2900 5300 3150 5300
-Text Label 3000 4200 0    50   ~ 0
+Text Label 2450 4200 1    50   ~ 0
 GATE
 Wire Wire Line
 	4550 5050 3950 5050
 Wire Wire Line
 	3950 5050 3950 5000
 Wire Wire Line
-	4550 5350 4350 5350
-Wire Wire Line
 	3950 5350 3950 5600
-Connection ~ 2700 4000
-Wire Wire Line
-	2700 4000 2650 4000
 Connection ~ 3050 3400
 Wire Wire Line
 	3050 3400 2650 3400
@@ -323,27 +300,6 @@ Wire Wire Line
 	4300 3600 5350 3600
 Wire Wire Line
 	4350 2800 4300 2800
-$Comp
-L Device:R R1
-U 1 1 5EEECF4C
-P 4350 5800
-F 0 "R1" H 4420 5846 50  0000 L CNN
-F 1 "150" H 4420 5755 50  0000 L CNN
-F 2 "Resistor_SMD:R_2512_6332Metric" V 4280 5800 50  0001 C CNN
-F 3 "~" H 4350 5800 50  0001 C CNN
-	1    4350 5800
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4350 5650 4350 5350
-Connection ~ 4350 5350
-Wire Wire Line
-	4350 5350 3950 5350
-Wire Wire Line
-	4350 5950 4350 6300
-Connection ~ 4350 6300
-Wire Wire Line
-	4350 6300 4200 6300
 $Comp
 L Device:CP1 C2
 U 1 1 5EEF337A
@@ -587,11 +543,6 @@ Wire Wire Line
 Connection ~ 5950 5650
 Wire Wire Line
 	5950 5650 5550 5650
-Wire Wire Line
-	2600 4400 2700 4400
-Wire Wire Line
-	2750 4400 2700 4400
-Connection ~ 2700 4400
 $Comp
 L Connector:Conn_01x02_Female J1
 U 1 1 5EED628F
@@ -695,12 +646,8 @@ F 3 "" H 4250 6500 50  0001 C CNN
 $EndComp
 NoConn ~ 3150 5400
 Wire Wire Line
-	1500 1000 1500 1100
-Wire Wire Line
 	1500 1100 1350 1100
 Connection ~ 1350 1100
-Wire Wire Line
-	1450 1350 1450 1200
 Wire Wire Line
 	1450 1200 1350 1200
 Connection ~ 1350 1200
@@ -731,4 +678,28 @@ F 3 "~" H 7800 3250 50  0001 C CNN
 	1    7800 3250
 	-1   0    0    1   
 $EndComp
+Wire Wire Line
+	5600 2800 5350 2800
+Connection ~ 5350 2800
+Wire Wire Line
+	1500 1000 1500 1100
+Wire Wire Line
+	1450 1200 1450 1350
+Wire Wire Line
+	2650 4000 2750 4000
+$Comp
+L Device:Q_NMOS_DGS Q1
+U 1 1 5EF1F730
+P 2650 4200
+F 0 "Q1" H 2854 4246 50  0000 L CNN
+F 1 "Q_NMOS_DGS" H 2854 4155 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 2850 4300 50  0001 C CNN
+F 3 "~" H 2650 4200 50  0001 C CNN
+	1    2650 4200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3950 5350 4550 5350
+Wire Wire Line
+	4200 6300 5050 6300
 $EndSCHEMATC
