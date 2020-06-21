@@ -1,0 +1,208 @@
+\section{Design of the Forward Converter}
+\subsection{System Level Design}
+
+The most important element in isolated power supplies is the transformer. Without knowing the transformer properties, it is not possible to move on with the simulations. Hence, the design process is now orderly. Output inductor and capacitor can also be chosen by theoretical knowledge.
+
+Although it is possible to have a "pre-simulation" idea on the voltage stresses or current carrying capabilities for the semiconductor devices in the topology, it is safer to choose them in the guidance of the simulation results. Some of the non-idealities will also be involved in the simulations as well, allowing us to make more accurate assumptions about component selection. 
+
+In this part, we need to look at general specifications of the forward converter. Our customer, from Habelsan, asked us to  satisfy these specifications:
+
+\begin{itemize}
+    \item Input voltage rate: $24V-48V$
+    \item Output voltage: $15V$
+    \item Output power: $48W$
+    \item Output voltage ripple: $2\%$, maximum
+    \item Line and Load regulations: $2\%$, maximum
+\end{itemize}
+
+Firstly, we need to look at input-output voltage relationship of the forward converter. Ratio between the two is derived in the previous parts as:
+
+\begin{equation}
+    \frac{V_o}{V_d} = \frac{N_2}{N_1}D
+\end{equation}
+
+Output current's average value is $\frac{48W}{15V} = 3.2A$. As mentioned before, demagnetization of the core in the forward converter is important. Among different techniques,it is decided to use a reset winding. Turn number of the reset winding is chosen to be equal to that of the primary winding, conventionally and we will stick to that convention as well. This situation puts a restriction on the duty cycle to ensure proper demagnetization of the core.Duty cycle for the operation should be $D < 0.5$.
+
+\textbf{Turns Ratio \& Duty Cycle}
+
+In the project, required voltage transfer ratios are 48V to 15V, and 24V to 15V. It is important to take into account that the limit of duty cycle is $D_{max} = 0.5$, and it is very crucial to reset all the core.
+
+Using the input output equation and duty cycle restrictions, we choose the turn ratio between first and secondary winding as:
+
+$$\frac{N_2}{N_1} = 2$$
+
+
+Using these ratio, it is now easy to find required duty ratios. For 48V input,
+
+$$D = \frac{48}{15} = 2 \implies D_{min} = 0.156$$
+
+and For 24V input,
+
+$$D = \frac{24}{15} = 2 \implies D_{max} = 0.3125$$
+
+As can be seen, the duty cycle ratios obey the restrictions and they also allow a margin to compensate for the non-idealities.
+
+\textbf{Frequency}
+
+As switching frequency of the MOSFET, it is important to note that higher frequencies increases the switching losses. Also, at high frequencies, skin depth of the cable decreases dramatically. Moreover, it is also needed to be pointed that at higher frequencies hysteresis losses increase in the core. Therefore, we decided to keep our frequency less than 30kHz, $f < 30kHz$
+
+Secondly, as frequency decreases, the amount of ripple at the output increases due to longer switching periods. Furthermore, it is important to keep the frequency at inaudible range so that the converter is not noisy. We decided that frequency should be higher than 20kHz, $f > 20kHz$.
+
+Combining these two
+$$20 kHz < f < 30kHz$$
+In the simulations, we decided as the best frequency would be 25kHz. Therefore, for our forward converter the frequency is $f = 25kHz$
+
+
+\subsection{Transformer Design}
+In the forward converter topology, it is important to realize the fact that transformer is introduced in order to transfer the power from primary to secondary. For this reason, we do not need any air gap in our transformer design. Moreover, a transformer with high inductance will allow us to operate in low magnetizing current levels due to high impedance of the inductor. When we combine these, we can start our calculations.
+
+The first approach is to calculate $WaAc$, it shows the power handling capacity of our transformer. Its formula is as follows:
+
+\begin{equation}
+    W_a A_c = \dfrac{P_o D_{cma}}{K_t B_{max} f}
+\end{equation}
+
+Here $P_o = 48W$, power out in watts, $D_{cma} = 500 \; cir/mils.amp$, is current density, $K_t = 0.0005$, topology constant given for forward converter. $B_{max} = 2500 G$, maximum flux density in gauss and $f=25kHz$ is the frequency. 
+
+When we calculate the result
+
+$$ W_a A_c = 0.768 \; cm^4$$
+
+Now, using the magnetics' available cores offered for power handling capacities, we are going to choose a proper core. We chose an R material E shaped core, it is high in inductance and low in loss. It is very proper for this application.
+
+The core link: \href{https://www.mag-inc.com/Media/Magnetics/Datasheets/0R43515EC.pdf}{Core}
+
+Now it is important to choose turn number for primary side. The secondary and third windings depend on the primary side. We are going to apply following approach:
+
+\begin{equation}
+    N_p = \dfrac{V_p 10^8}{4BA_c f}
+\end{equation}
+
+We choose following parameters for this application: $V_p = 48V$, $B = 0.25 T $, $A_c = 0.87 cm^2$ it given in the datasheet of the core and $f=25kHz$. The result is:
+
+$$N_p = 22 \; turn$$
+
+Naturally, we have $N_1 = 22, N_2 = 44, N_3 = 22$ due to our selection.
+
+
+The turns number for windings are determined as 
+\begin{itemize}
+    \item Primary winding, $n_1 = \textbf{22 turns}$
+    \item Reset winding, $n_3 = \textbf{22 turns}$
+    \item Secondary winding, $n_2 = \textbf{44 turns}$
+\end{itemize}
+
+Now, it is very important to take magnetizing inductance into account. In the datasheet we can easily see that the AL value is given as $AL = 2667 nH/T^2$. As we decided our turn number is 22, we can easily calculate the magnetizing inductance as:
+
+$$ L_m = 22^2 * 2667 * 10^{-9} = 1.3 mH$$
+
+This is a great value becuase a low magnetizing inductance will increase the magnetizing current at the primary side, as a result we would need a higher current capability. However, 1.3mH is a legitimate value. If we calculate the magnetizing current at operating frequency:
+
+$$ I_m = \dfrac{V}{Z} = 0.235 A $$
+
+
+\subsection{Cable Selection}
+
+
+In practical cases maximum fill factor achievable is stated at 50\%. We need to take these two parameters into account.
+
+Moreover, it is important to notice that, the input current at the maximum operation is $I_{in} = 2A$ and $I_m = 0.235A$, as overall we need minimum of $I_1 = 2.3A$ at the primary side. At the secondary side we are going to have a maximum of $I_o = 3.2A$, we have to take these into account. 
+
+Using a simple approach $1 mm^2$ of cable can carry $4A$, and considering skin depth. We have chosen to use AWG22 cable. It's area is $0.327 mm^2$ and it can carry a current up to $1.3A$. Also, it's maximum skin depth is applicable up to $42kHz$, that is to say since our operating frequency is $25kHz$, this cable is proper to use. Considering margins, we are going to choose needed parallel cable amount.
+
+In the output we need 2 parallel cables, and at the output we need 3 parallel cables.
+
+Now, it is important to have a look at the fill factor. It is very crucial to have a fill factor around $50\%$ so that our transformer is realizable. 
+
+If we calculate the cable areas:
+
+$$A_{cable} = 0.326*22 + 0.326*22 + 0.326*44 = 71.9 mm^2$$
+
+If we check our core's window area, we can see that it is:
+
+$$A_{window} = 9.8*8*2 = 156.8 mm^2 $$
+
+So the fill factor of our transformer is:
+
+$$k = \dfrac{61.1}{156.8} = 46\%$$
+
+This fill factor is applicable and not an overdesign. Therefore, the cable selections are proper. We have a legitimate fill factor, we have 100\% skin depth, and we have margins so that there is no burnout. In the next step we are going to cover the capacitor and inductor.
+
+
+\subsection{Inductor and Capacitor Design}
+
+To design the inductor, we are focus on the maximum ripple current allowed. In the specifications, it is not determined, so we are going to have 20\% maximum ripple current so that our output current would be out of harmonics and the filtering capacitor would be smaller.
+
+At the ON period, the inductor is charging, and using the voltage among the terminals we can find the ripple current value.
+
+$$ \Delta I = \frac{1}{L} \int_{0}^{DT_s} V_L dt < \dfrac{3.2A}{5} $$
+
+$$ \Delta I = \frac{1}{L} \int_{0}^{DT_s} (V_s \frac{N_2}{N_1} - V_o) dt < 0.64A$$
+
+$$ 0.62mH < L$$
+
+Also, it is very important to take rated current into account. The minimum rated current that inductor can carry must be minimum of $3.2A + 0.65A \approx 3.8A$
+
+Using digikey website, we chose a proper inductor. It is important to have a small inductor in order to decrease the size and the weight.
+
+Inductor Link: \href{https://www.digikey.com/product-detail/en/bourns-inc/2300LL-681-H-RC/2300LL-681-H-RC-ND/725890}{Inductor}
+
+Capacitor design is depending on the inductor design. As we know, we have to limit the ripple value of the output voltage. Also, the current that is flowing through the output is equal to the inductor current. We need to follow the following approach.
+
+\begin{equation}
+    \Delta V = \dfrac{\Delta Q}{C}
+\end{equation}
+
+\begin{equation}
+    \Delta Q = \Delta I_L * \dfrac{T_s}{8}
+\end{equation}
+
+Here, we are using buck converter capacitor design approach. They are same in the application:
+
+$$ \Delta V = 0.3V > \dfrac{DT_s^2 (V_s \dfrac{N_2}{N_1} - V_o) }{8LC}$$
+
+$$ C > 28 \micro F$$
+
+Also, apparently the rated voltage of the capacitor should be higher than the rated voltage of the output, for that reason $C_{v,rated} > 15V$
+
+Capacitor Link: \href{https://product.tdk.com/info/en/documents/chara_sheet/C3216JB1E336M160AC.pdf}{Capacitor}
+
+ESR value of the capacitor is: 
+
+
+\subsection{Switch and Diode Design}
+
+In these voltage levels and frequency levels it is proper to use MOSFET due to their fast recovery. It is also easy to implement a MOSFET into a converter. While designing the MOSFET, it is very important not to exceed its rated voltage and current values.
+
+In the simulations with idealities, we came up with the values that:
+
+\begin{itemize}
+    \item Switches' stress have their maximum values for input of 48V naturally. We can say that switches must be endurable minimum of 100V rated reverse voltage and 10A forward voltage.
+    \item Switches must be proper to operate at 25kHz range, reverse recovery times should be appropriate.
+\end{itemize}
+
+The MOSFET Link: \href{https://www.digikey.com/product-detail/en/on-semiconductor/FDMS86255/FDMS86255TR-ND/4555505}{MOSFET}
+
+
+
+Silicon diodes are proper because they are cheap in cost and they have proper operation for this implementation range. 
+
+In the simulations with idealities, we came up with the values that:
+
+\begin{itemize}
+    \item Diode' stress have their maximum values for input of 48V naturally. We can say that switches must be endurable minimum of 100V rated reverse voltage and 4A forward voltage.
+    \item Diode must be proper to operate at 25kHz range, reverse recovery times should be appropriate.
+\end{itemize}
+
+Results of simulations will be introduced at next part.
+
+\subsection{Feedback Controller Circuitry}
+
+To keep the voltage constant at 15V and to satisfy the line/load regulations, an analog controller IC is to be used. A very popular PWM controller IC for power supplies, \textbf{TL494} by \emph{Texas Instruments} is chosen. Additional features comes with it makes it a favorable choice and in this section, some of them that we implemented in our design are to be presented.
+
+To power up the module, a DC-DC converter is used. 
+
+
+TL494 is able to drive two switches together, but only one of the outputs is to be used in our project. Soft starting and current limiting features are to be adapted to our application, though. Additional circuitry for them can be found in the application notes regarding TL494. 
+
+To ensure electrical isolation between input and output sections of the converter, an optocoupler is to be used to drive the switching element. Our choice for this element is \textbf{TLP250} by \emph{Toshiba}. It is a familiar IC for us, since it is used previously on the hardware project of EE463.
