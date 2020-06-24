@@ -1,0 +1,60 @@
+\documentclass[12]{article}
+\usepackage{chngcntr}
+
+\usepackage{gensymb}
+\usepackage{float}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{subcaption}
+\usepackage{verbatim}
+\usepackage{wrapfig}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=blue
+}
+
+\setlength{\oddsidemargin}{0.25 in}
+\setlength{\evensidemargin}{-0.25 in}
+\setlength{\topmargin}{-0.6 in}
+\setlength{\textwidth}{18 cm}
+\setlength{\textheight}{25 cm}
+\setlength{\headsep}{0.75 in}
+\setlength{\parindent}{0 in}
+\setlength{\parskip}{0.1 in}
+\usepackage{geometry}
+\usepackage[final]{pdfpages}
+\usepackage{textcomp}
+\usepackage[table,xcdraw]{xcolor}
+\counterwithin{figure}{subsection}
+\usepackage{graphicx}
+\usepackage[inkscapeformat=pdf,inkscapelatex=false]{svg}
+\graphicspath{ {./Figs/} }
+
+\begin{document}
+\input{titlepage.tex}
+
+\tableofcontents
+\newpage
+\input{Introduction.tex}
+\input{ProblemDefinition.tex}
+\input{ForwardGeneral.tex}
+\input{Design.tex}
+\input{Simulations.tex}
+\input{Nonideal.tex}
+\input{CompansatorDesign}
+\input{Efficiency}
+\input{PCB.tex}
+
+\input{Conclusion.tex}
+\newpage
+\input{Appendix.tex}
+\input{References}
+\end{document}

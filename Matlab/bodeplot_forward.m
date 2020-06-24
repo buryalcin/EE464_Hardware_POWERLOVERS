@@ -29,8 +29,8 @@ t = t_B/t_A;
 % 
 figure(1)
 bode(t,{1e2,10e7})
-title('Bode Plot Worst Case');
-legend('non-ideal')
+title('Bode Plot of Converter');
+legend('Plant')
 grid on
 set(findall(gcf,'Type','line'),'LineWidth',2)
 set(gca,'FontSize',12)
@@ -86,10 +86,20 @@ A  = s*Rf1*(Cc1 + Cc2)*(1 + s*Rc1*(Cc1*Cc2 / (Cc1 + Cc2))*(1 + s*Rf3*Cf3));
 H = B/A;
 % 
 figure(2)
-bode(H)
+bode(H,{1e2,10e7})
+title('Bode Plot of Compensator');
+legend('Compensator')
+grid on
+set(findall(gcf,'Type','line'),'LineWidth',2)
+set(gca,'FontSize',12)
 % 
-figure(3)
-bode(t*H)   
+figure(3)  
+bode(t*H,{1e2,10e7})
+title('Bode Plot of Open Loop');
+legend('Open-loop')
+grid on
+set(findall(gcf,'Type','line'),'LineWidth',2)
+set(gca,'FontSize',12)
 % 
 % 
 % 

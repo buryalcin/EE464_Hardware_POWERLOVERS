@@ -1,0 +1,149 @@
+\section{Efficiency and Thermal Analysis}
+\subsection{Efficiency Analysis}
+
+In the project, the converter is non-ideal, and there are losses expected to be. Now, analytically, one by one, we are going to cover the losses on the circuit.
+
+\textbf{Capacitor ESR Losses}
+
+Over the capacitor, the current that will flow is the amount of inductor current ripple. So, the average current over the capacitor is
+
+\begin{equation}
+    I_c = \dfrac{\Delta I_L T_s}{8} = 0.31A
+\end{equation}
+
+Easily, the loss on the ESR of the capacitor is:
+
+\begin{equation}
+    P_{esr,loss} = 0.31^2*0.003 = 0.3 mW
+\end{equation}
+
+It is a quite low value because we have chosen a ceramic capacitor.
+
+\textbf{Inductor ESR Losses}
+
+Over the inductor, the current flowing is 3.2A since output current is equal to inductor average current. 
+
+\begin{equation}
+    P_{L,loss} = 3.2^2*0.06 = 0.61W
+\end{equation}
+
+\textbf{Diode Losses}
+
+Over the diodes, inductor current is flowing. So, easily:
+
+\begin{equation}
+    P_{D,loss} = 0.7 * 3.2 = 2.24W
+\end{equation}
+
+\textbf{MOSFET Loss}
+
+Over the MOSFET, the loss at 10A current is given in the datasheet as 2.4W. We are going to use this value:
+
+\begin{equation}
+    P_{MOSFET} = 2.4W
+\end{equation}
+
+
+\textbf{Transformer Loss}
+
+At the primary side:
+
+\begin{equation}
+    P_{pri} = 0.033 * 2^2 = 0.13W
+\end{equation}
+
+At the secondary side:
+
+\begin{equation}
+    P_{sec} = 3.2^2*0.045 = 0.46
+\end{equation}
+
+At the third winding
+
+\begin{equation}
+    P_{third} = 0.22^2 * 0.33 = 0.016W
+\end{equation}
+
+For the core loss, we should calculate the loss: 
+
+Using the Magnetics R Material loss calculator, we have $124mW/cm^3$ loss in the core. Our core has a volume of $5.6*2 = 11.2 cm^3$
+
+\begin{equation}
+    P_{core} = 0.124 * 11.2 = 1.4W
+\end{equation}
+
+\textbf{Total Loss}
+
+Total loss over the circuit is ignoring the leakage inductance:
+
+\begin{equation}
+    P_{total} = 0.003W + 0.61W + 2.24W + 2.4W + 0.13W + 0.46W + 0.016W + 1.4W = 7.3W
+\end{equation}
+
+\textbf{Efficiency}
+
+Efficiency, ignoring the loss around the snubber:
+
+\begin{equation}
+    \eta = \dfrac{P_{out}}{P_{out} + P_{loss}} = \dfrac{48W}{48W+7.3W} = \dfrac{48W}{55.3W} = 86.7\%
+\end{equation}
+
+When, we simulate the circuit without using the snubber circuit the resultant efficiency is:
+
+\begin{equation}
+    \eta_{sim} = \dfrac{P_{out}}{P_{in}} = \dfrac{48W}{52.12W} = 92\% 
+\end{equation}
+
+However, this value does not include the core loss. When we analytically add the core loss on it!
+
+\begin{equation}
+    \eta_{total} = \dfrac{48W}{54.62W} = 87.8\% 
+\end{equation}
+
+Analytical calculations and simulation results are so similar!!
+
+When we think of the snubber circuit, we can see that the average current around the snubber is:
+
+\begin{equation}
+    I_{snubber} = \dfrac{0.1}{2} = 0.05A
+\end{equation}
+
+\begin{equation}
+    P_{snubber} = 0.05^2 * 1250 = 3.1W
+\end{equation}
+
+So, efficiency including the snubber is:
+
+\begin{equation}
+    \eta_{sn,total} = \dfrac{48W}{59W} = 81\%
+\end{equation}
+
+In the simulations, the efficiency simulated is 79\%. We can say that we have an efficiency of 80\% including the snubber circuit, leakage inductance, all ESR values and MOSFET, diode losses. This is a good efficiency for a forward converter.
+
+\subsection{Thermal Analysis}
+
+Losses on semiconductors are calculated in the previous subsection. By looking at their values and the thermal resistances of these components, we can have an idea if the temperature of these devices are within the operating range. Heatsinks can be used to cool them down. A heatsink suggestion will be made for the components in this section. 
+
+\textbf{MOSFET}
+
+Loss on MOSFET is calculated as 2.4 W. Thermal resistance is obtained from the datasheet. Two values are given based on the mounting specification of the device. If a copper pad is built under it the thermal resistance decreases significantly but that was not the practice in our design.
+
+Normally, thermal resistance of the MOSFET is given as $113 \degree C \W$. Considering that the device can work properly up to 150 \degreeC, a heatsink is definitely required. Junction to case thermal resistance of the MOSFET is
+$$R_{jc} = 1.1 \; \degree C /W$$
+A heatsink as small as possible is chosen from DigiKey website. Datasheet can be found \href{https://www.digikey.com/product-detail/en/aavid-thermal-division-of-boyd-corporation/577102B00000G/HS106-ND/108319}{here}. It is cheap yet efficient. Thermal resistance value for the heatsink is 
+$$R_{sink} = 25.9\; \degree C /W$$
+
+Assuming that the ambient temperature is 25 C\degree, operating temperature for the MOSFET junction can be found as follows.
+$$T_{op} = T_{amb} + P_{loss}*(R_{jc}+R_{sink}) \implies T_{op} = 25 + 2.4*27 \approx 90 \degree C $$
+
+This value is reasonable for our device and operation can continue safely with no problems.
+
+\textbf{Diodes}
+
+From the datasheet, loss is obtained as 2.24 W on diodes. This value is very close to that of MOSFETs. Thermal resistance of diode is obtained from the datasheet as
+$$R_{jc} = 3 \; \degree C /W$$
+Same heatsink can be used for the diodes as well. Similar calculation yields nearly the same result.
+
+$$T_{op} = T_{amb} + P_{loss}*(R_{jc}+R_{sink}) \implies T_{op} = 25 + 2.24*28.9 \approx 90 \degree C $$
+
+We can say that with the suggested heatsink, semiconductors can operate at temperatures around 90\degreeC. Switching losses are not included in the calculations since switching frequency is relatively low, but the margin is high enough to compensate for them as well. 

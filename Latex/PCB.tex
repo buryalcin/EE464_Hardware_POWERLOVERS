@@ -1,0 +1,176 @@
+\section{PCB Design}
+A PCB design is done for the converter, as requested by the recent changes in the hardware project. An open source PCB design tool, KiCad is used for the design. Lots of schematic symbols and footprints created by the users were available online. The transformer model is created by the team only. 
+\subsection{Feedback Controller}
+
+To keep the voltage constant at 15V and to satisfy the line/load regulations, instead of the previously designed compensator, an analog IC controller is implemented on PCB. A very popular PWM controller IC for power supplies, \textbf{TL494} by \emph{Texas Instruments} is chosen. Additional features comes with it makes it a favorable choice and in this section, some of them that are implemented in our design are to be presented. 
+
+Pin configuration of the module can be seen at Fig \ref{TL494_pin}
+\begin{center}
+\begin{figure}[H]
+\centering
+\includegraphics [width= 12 cm ]{TL494_pin.png}
+\caption{Pin Configuration for TL494}
+\label{TL494_pin}
+\end{figure}
+\end{center}
+
+\textbf{Powering Up TL494}
+
+To power up the module properly, a DC-DC converter is used. Input voltage to TL494 is set to 12 V. A DC-DC converter module by \emph{Artesyn Inc.}, ATA00B36S-L is used. It can supply 3W of power at 12 V from an input between 18-75 V. Our input voltage to the system falls in its operation range, therefore this module can be used with no problems. Datasheet regarding this module can be found \href{ https://www.artesyn.com/assets/ata_series_ds_01apr2015_79c25814fd.pdf}{here.} 
+
+\textbf{Basic Wiring}
+For the wirings described as of this subsection, the application note by the TI is used. [5]
+TL494 is able to drive two switches together, but only one of the outputs is to be used in our project. First of all, the switching frequency of the module should be set. It is done by a simple RC circuit connected to pins 5 and 6. Internally it connects to the oscillator of the module and sets the frequency. Switch frequency is 25 kHz in our design. 
+$$f_{switch} = \frac{1}{R_{T}C_{T}}$$
+
+Standard values are chosen for the components and $f_{switch} \approx 25.9 kHz$ is achieved. 
+$$R_{T} = 8.2 \;k\ohm$$
+$$C_{T} = 4.7 \;nF$$
+
+One of the error amplifiers in the module is for regulating the output voltage. The working principle is simple. Inverting input is fed by a constant voltage value from the voltage reference of the module. 2.5 V is chosen for this. And the non-inverting input is fed from the output voltage of the converter. A schematic is given in Fig \ref{TL494_volt}. 
+
+\begin{center}
+\begin{figure}[H]
+\centering
+\includegraphics [width= 10 cm ]{TL494_volt.png}
+\caption{Output Voltage Regulation by TL494}
+\label{TL494_volt}
+\end{figure}
+\end{center}
+
+Output voltage of the converter is 15V, therefore the voltage divider resistances are chosen as follows.
+$$R_1 = 10 \; k\ohm$$
+$$R_2 = 2 \; k\ohm$$
+Amplifier gain is increased to 101 with a simple feedback loop formed  between pins 2 and 3, inverting input and output of the amplifier respectively. Two resistors with ratings $51 k\ohm$ and $510 k\ohm$ are used to achieve this. 
+
+
+\textbf{Current Limitation}
+
+A second error amplifier is reserved for output current limitation. When the output current goes beyond the adjusted value, the gate signal to the converter is cut therefore a short-circuit protection is implemented by the control circuitry. 
+
+Again, voltage reference output of the controller is fed to the inverting input of the current error amplifier. Voltage is set to 1V here. The current limit here is chosen as 5A in our application. Therefore, a really small resistor, referred to as $R_{13}$ in Fig \ref{TL494_current}, is connected in series with the load. In our application it is chosen as $\mathbf{0.2 \ohm}$.
+
+\begin{center}
+\begin{figure}[H]
+\centering
+\includegraphics [width= 10 cm ]{TL494_current.png}
+\caption{Short Circuit Protection by TL494}
+\label{TL494_current}
+\end{figure}
+\end{center}
+
+\textbf{Soft Start Application}
+
+There is only on switching element in our design, therefore the dead time application is not needed. Nevertheless, a soft starting mechanism is added. The wiring can be seen at Fig \ref{TL494_soft}. 
+
+\begin{center}
+\begin{figure}[H]
+\centering
+\includegraphics [width= 10 cm ]{TL494_soft.png}
+\caption{Soft Start with TL494}
+\label{TL494_soft}
+\end{figure}
+\end{center}
+
+At the beginning of the regulation, $C_2$ capacitor charges through $R_6$ and by this way, the output pulse slowly increases till the control loop takes command. Considering $R_6$ is about one tenth of $R_T$ resistor, which corresponds to a $1 k\ohm$ resistance, the capacitor value can be calculated as follows. 50 cycles is chosen for the soft start time. 
+$$C_{2} = \frac{Soft-start \: duration}{R_{6}} = \frac{40\micro s * 50}{1k\ohm} \approx 2.2 \micro F$$
+
+\textbf{Gate Driver}
+
+To ensure electrical isolation between input and output sections of the converter, an optocoupler is to be used to drive the switching element. Our choice for this element is \textbf{TLP250} by \emph{Toshiba}. It is a familiar IC for us, since it is used previously on the hardware project of EE463. A seperate power supply is needed to drive the gate driver, therefore there are two power input pin pairs to the converter : one for the main supply and for the gate driver. 
+\subsection{Schematic}
+A schematic is the first step to create a PCB. Kicad's "Eeschema" tool is used for this means. Generic symbols for diodes, inductors and such are used. Semiconductor symbols were available at the library. The symbol created for the three-winding transformer can be seen at Fig \ref{trafo}.
+
+\begin{center}
+\begin{figure}[H]
+\centering
+\includegraphics [width= 12 cm ]{trafo.png}
+\caption{Schematic Symbol for Transformer in KiCad}
+\label{trafo}
+\end{figure}
+\end{center}
+
+Necessary wirings for TL494 are done as told in previous subsection. DC-DC Converter is added. Resulting schematic can be seen at Fig \ref{schematic}.
+
+\begin{center}
+\begin{figure}[H]
+\centering
+\includegraphics [width= 22 cm, angle=90 ]{schematic.png}
+\caption{Converter Circuit Schematic in KiCad}
+\label{schematic}
+\end{figure}
+\end{center}
+\subsection{Footprints}
+After the schematic is completed, components should be annotated and footprints should be assigned to each one of them. The packages are matched with each component chosen. The list  for the components used in the PCB Design and the corresponding footprint selections can be seen in Fig \ref{footprints}. 
+
+\begin{center}
+\begin{figure}[H]
+\centering
+\includegraphics [width= 12 cm ]{footprints.png}
+\caption{Footprint List in KiCad}
+\label{footprints}
+\end{figure}
+\end{center}
+
+A footprint for the transformer was not readily built, since the transformer is to be designed by the team. Only the transformer's footprint is custom made. The dimensions of the chosen core is taken into consideration. 6 pads are formed for each ends of three windings. The resulting footprint can be seen in Fig \ref{trafo_foot}.
+
+\begin{center}
+\begin{figure}[H]
+\centering
+\includegraphics [width= 12 cm ]{trafo_foot.png}
+\caption{Footprint for Transformer}
+\label{trafo_foot}
+\end{figure}
+\end{center}
+
+\subsection{PCB View}
+
+After all these arrangements are made, the PCB design process can begin. There are some basic rules to that, although we are not so experienced in PCB design we tried to apply all we know. 
+
+First of all, traces should not make perpendicular turns. This can cause serious EMI problems and should be avoided all the times. Second thing that is considered with utmost attention is the trace widths. In the converter, currents can reach up to 3-4 A during operation. A simple PCB trace width calculator is used to make sure that our design can carry such currents. For control parts, default trace width is used but at the input and output stages, trace widths are 22 and 32 mils, respectively. It is assumed that $2 oz/ft^2$ of copper will be used. 
+
+In order to make connections easier and to use less vias, through hole resistors are used. This can be changed and compactness could be improved but overall, the design looked neat enough to us. Some components are flipped when necessity occured. 3-4 vias are used as well. 
+
+The PCB View of the design can be seen in Fig \ref{pcb_view} at the next page. The copper filling for the back layer is also done but to make components and connections more visible, it is not given in the following representation. 
+
+\begin{center}
+\begin{figure}[H]
+\centering
+\includegraphics [width= 22 cm, angle=90 ]{pcb_view.png}
+\caption{PCB Design in KiCad}
+\label{pcb_view}
+\end{figure}
+\end{center}
+
+\subsection{3-D View}
+Transformer and connector models are absent but a 3-D View of the project is presented  below. 
+
+\begin{center}
+\begin{figure}[H]
+\centering
+\includegraphics [width= 12 cm ]{3d_front.png}
+\caption{3-D View of the PCB, Top Layer}
+\label{3d_front}
+\end{figure}
+\end{center}
+
+\begin{center}
+\begin{figure}[H]
+\centering
+\includegraphics [width= 12 cm ]{3d_back.png}
+\caption{3-D View of the PCB, Bottom Layer}
+\label{3d_back}
+\end{figure}
+\end{center}
+
+\subsection{Arrangement for 1000 Pieces from PCBWay}
+
+When the design is completed, Gerber files are obtained and the board is ready for production. As suggested in the GitHub page, PCBWay has been the choice for producing the board. Price for 5 pieces, which is the minimum number allowed is calculated as \textbf{\$ 63} and for 1000 pieces it is \textbf{\$ 1320}. 
+
+Component prices are given in detail in the Bill of Materials (BOM) presented in the following pages. Overall manifacturing costs are calculated from BOMs.
+\begin{itemize}
+    \item One piece production cost : \textbf{\$52.43}
+    \item 1000 piece production, cost per piece : \textbf{\$28.95}
+\end{itemize}
+
+It can be easily seen that mass production is more profitable. For each cases BOMs are presented in the Appendix. Original Excel files can be found at GitHub repository. 
